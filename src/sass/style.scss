@@ -1,0 +1,11 @@
+@import './bulma/bulma';
+@import 'variables';
+
+html{
+	background: $color-rain-lighter;
+	background: $color-ground;
+}
+
+body{
+	color: $color-midnight;
+}

@@ -1,0 +1,5 @@
+.DS_Store
+node_modules
+dist
+coverage
+src/js/firebase/firebase.SAMPLE.js
