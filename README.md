@@ -28,7 +28,7 @@ Deploying for local usage if you don't want use webpack dev server run `npm/yarn
 ```
 npm run dev-server / yarn run dev-server
 ```
-visit the http://localhost:8080/
+visit the http://localhost:9000/
 ### Build for production
 Deploying everything for production.
 ```
