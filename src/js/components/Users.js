@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { compose } from 'recompose';
 
 import withAuthorization from './withAuthorization';
 import { db } from '../firebase';
 
 class UsersPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: null,
-    };
-  }
-
   componentDidMount() {
+    const { userStore } = this.props;
     db.onceGetUsers().then(snapshot =>
-      this.setState(() => ({ users: snapshot.val() })));
+      userStore.setUsers(snapshot.val()));
   }
 
   render() {
-    const { users } = this.state;
+    const { users } = this.props.userStore;
     return (
       <div>
         <p>The Users Page is accessible by every signed in user.</p>
@@ -49,4 +44,4 @@ const UserList = users => (
 );
 const authCondition = authUser => !!authUser;
 
-export default withAuthorization(authCondition)(UsersPage);
+export default compose(withAuthorization(authCondition), inject('userStore'), observer)(UsersPage);

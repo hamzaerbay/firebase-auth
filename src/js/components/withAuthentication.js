@@ -1,30 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 
 import { firebase } from '../firebase';
 
 // higher order components
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        authUser: null,
-      };
-    }
-
-    getChildContext() {
-      return {
-        authUser: this.state.authUser,
-      };
-    }
-
     componentDidMount() {
+      const { sessionStore } = this.props;
       firebase.auth.onAuthStateChanged((authUser) => {
         if (authUser) {
-          this.setState(() => ({ authUser }));
+          sessionStore.setAuthUser(authUser);
         } else {
-          this.setState(() => ({ authUser: null }));
+          sessionStore.setAuthUser(null);
         }
       });
     }
@@ -34,11 +22,7 @@ const withAuthentication = (Component) => {
     }
   }
 
-  WithAuthentication.childContextTypes = {
-    authUser: PropTypes.object,
-  };
-
-  return WithAuthentication;
+  return inject('sessionStore')(WithAuthentication);
 };
 
 export default withAuthentication;

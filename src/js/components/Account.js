@@ -1,23 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
+import { compose } from 'recompose';
 
 import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
 
 
-const AccountPage = (props, { authUser }) => (
+const AccountPage = ({ sessionStore }) => (
   <div className="has-text-centered">
-    <h1 className="title">Welcome  - {authUser.email}
+    <h1 className="title">Welcome  - {sessionStore.authUser.email}
     </h1>
     <PasswordForgetForm />
     <PasswordChangeForm />
   </div>
 );
-AccountPage.contextTypes = {
-  authUser: PropTypes.object,
-};
-
 const authCondition = authUser => !!authUser;
 
-export default withAuthorization(authCondition)(AccountPage);
+export default compose(withAuthorization(authCondition), inject('sessionStore'), observer)(AccountPage);

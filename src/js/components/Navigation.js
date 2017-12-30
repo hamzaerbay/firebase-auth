@@ -1,6 +1,7 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
+import { compose } from 'recompose';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
@@ -20,7 +21,7 @@ const NavigationNonAuth = () => (
   </div>
 );
 
-const Navigation = (props, { authUser }) => (
+const Navigation = ({ sessionStore }) => (
   <nav className="navbar has-shadow" aria-label="main navigation">
     <div className="navbar-brand">
       <Link className="navbar-item" to={routes.LANDING}>
@@ -28,15 +29,11 @@ const Navigation = (props, { authUser }) => (
       </Link>
     </div>
     <div className="navbar-menu" id="navMenu">
-      { authUser
+      { sessionStore.authUser
         ? <NavigationAuth />
         : <NavigationNonAuth />
       }
     </div>
   </nav>
 );
-Navigation.contextTypes = {
-  authUser: PropTypes.object,
-};
-
-export default Navigation;
+export default compose(inject('sessionStore'), observer)(Navigation);

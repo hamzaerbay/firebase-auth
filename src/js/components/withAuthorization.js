@@ -1,6 +1,7 @@
 // Protection for auth pages
 import React from 'react';
-import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
+import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
 
 import { firebase } from '../firebase';
@@ -17,15 +18,10 @@ const withAuthorization = authCondition => (Component) => {
     }
 
     render() {
-      return this.context.authUser ? <Component /> : null;
+      return this.props.sessionStore.authUser ? <Component /> : null;
     }
   }
-
-  WithAuthorization.contextTypes = {
-    authUser: PropTypes.object,
-  };
-
-  return withRouter(WithAuthorization);
+  return compose(withRouter, inject('sessionStore'), observer)(WithAuthorization);
 };
 
 export default withAuthorization;
